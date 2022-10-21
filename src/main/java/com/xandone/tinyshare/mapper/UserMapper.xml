@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> -->
+<mapper namespace="com.xandone.tinyshare.mapper.UserMapper">
+    <resultMap id="adminBean" type="com.xandone.tinyshare.bean.UserBean">
+        <result column="account" property="account" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="nickName" property="nickName" jdbcType="VARCHAR"/>
+        <result column="userId" property="userId" jdbcType="INTEGER"/>
+        <result column="userIcon" property="userIcon" jdbcType="VARCHAR"/>
+
+        <result column="permission" property="permission" jdbcType="VARCHAR"/>
+        <result column="identity" property="identity" jdbcType="VARCHAR"/>
+        <result column="registTime" property="registTime" jdbcType="TIMESTAMP"/>
+        <result column="lastLoginTime" property="lastLoginTime" jdbcType="TIMESTAMP"/>
+        <result column="contribution" property="contribution" jdbcType="INTEGER"/>
+
+        <result column="totalAssets" property="totalAssets" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="getUserByAccount" parameterType="java.lang.String"
+            resultMap="adminBean">
+        select * from t_user where account = #{account}
+    </select>
+
+
+    <update id="updateUser" parameterType="com.xandone.tinyshare.bean.UserBean">
+        update t_user
+        <set>
+            <if test="password != null">password = #{password,jdbcType=VARCHAR},</if>
+            <if test="nickName != null">nickName = #{nickName,jdbcType=VARCHAR},</if>
+            <if test="userIcon != null">userIcon = #{userIcon,jdbcType=VARCHAR},</if>
+            <if test="permission != null">permission = #{permission,jdbcType=VARCHAR},</if>
+            <if test="identity != null">identity = #{identity,jdbcType=VARCHAR},</if>
+            <if test="registTime != null">registTime = #{registTime,jdbcType=TIMESTAMP},</if>
+            <if test="lastLoginTime != null">lastLoginTime = #{lastLoginTime,jdbcType=TIMESTAMP},</if>
+            <if test="contribution != null">contribution = #{contribution,jdbcType=INTEGER},</if>
+            <if test="totalAssets != null">totalAssets = #{totalAssets,jdbcType=VARCHAR},</if>
+        </set>
+        where userId = #{userId}
+    </update>
+</mapper>
