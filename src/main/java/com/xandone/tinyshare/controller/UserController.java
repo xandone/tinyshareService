@@ -36,7 +36,7 @@ public class UserController {
         List<UserBean> list = new ArrayList<>();
         UserBean adminBean;
         try {
-            if (visiteCode!=9527){
+            if (visiteCode!=0){
                 baseResult.setMsg("邀请码错误,注册失败");
                 baseResult.setCode(IReturnCode.ERROR_CODE);
                 return baseResult;
