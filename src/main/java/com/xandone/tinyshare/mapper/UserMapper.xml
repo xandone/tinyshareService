@@ -20,6 +20,26 @@
         <result column="totalAssets" property="totalAssets" jdbcType="INTEGER"/>
     </resultMap>
 
+
+    <insert id="addUser" parameterType="com.xandone.tinyshare.bean.UserBean">
+        insert into t_user
+        (account,
+        password,
+        nickName,
+        userIcon,
+        registTime,
+        lastLoginTime
+        ) values
+        (#{account},
+        #{password},
+        #{nickName},
+        #{userIcon},
+        #{registTime},
+        #{lastLoginTime}
+        )
+    </insert>
+
+
     <select id="getUserByAccount" parameterType="java.lang.String"
             resultMap="adminBean">
         select * from t_user where account = #{account}

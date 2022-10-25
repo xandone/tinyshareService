@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,14 +33,13 @@ public class AssetController {
         BaseResult baseResult = new BaseResult();
         AssetsBean assetsBean;
         try {
-            int userId= (int) map.get("userId");
-            System.out.println("userId="+map.get("userId"));
-            if (ProjectConstant.ADMIN_ID!=userId) {
+            int userId = (int) map.get("userId");
+            if (ProjectConstant.ADMIN_ID != userId) {
                 baseResult.setCode(IReturnCode.ERROR_NO_ADMIN_CODE);
                 baseResult.setMsg(IReturnCode.MES_NO_ADMIN);
                 return baseResult;
             }
-            if (map.get("assetId") == null || SimpleUtils.isEmpty( map.get("assetId"))) {
+            if (map.get("assetId") == null || SimpleUtils.isEmpty(map.get("assetId"))) {
                 assetsBean = assetService.addAssets(map);
             } else {
                 assetsBean = assetService.editAssets(map);
@@ -62,8 +62,8 @@ public class AssetController {
     @RequestMapping(value = "/assetlist")
     @ResponseBody
     public BaseListResult getAssetList(@RequestParam(value = "page") Integer page,
-                                         @RequestParam(value = "row") Integer row,
-                                         Integer type) {
+                                       @RequestParam(value = "row") Integer row,
+                                       Integer type) {
         BaseListResult baseResult = new BaseListResult();
         try {
             BaseListResult result = assetService.getAllList(page, row, type);
@@ -95,6 +95,33 @@ public class AssetController {
             baseResult.setCode(IReturnCode.SUCCESS);
             baseResult.setMsg(IReturnCode.MES_REQUEST_SUCCESS);
             return baseResult;
+        } catch (Exception e) {
+            e.printStackTrace();
+            baseResult.setCode(IReturnCode.ERROR_CODE);
+            baseResult.setMsg(IReturnCode.MES_SERVER_ERROR);
+        }
+        return baseResult;
+    }
+
+
+    @RequestMapping(value = "/searchlist")
+    @ResponseBody
+    public BaseListResult searchAssets(@RequestParam(value = "page") Integer page,
+                                     @RequestParam(value = "row") Integer row,
+                                     Integer type,
+                                     @RequestParam(value = "title") String title) {
+        BaseListResult baseResult = new BaseListResult();
+        try {
+            AssetsBean assetsBean = new AssetsBean();
+            assetsBean.setTitle(URLDecoder.decode(title, "UTF-8"));
+            assetsBean.setType(type);
+            BaseListResult result = assetService.searchAssets(page, row,assetsBean);
+            if (result != null) {
+                result.setCode(IReturnCode.SUCCESS);
+                result.setMsg(IReturnCode.MES_REQUEST_SUCCESS);
+                return result;
+            }
+            baseResult.setCode(IReturnCode.ERROR_CODE);
         } catch (Exception e) {
             e.printStackTrace();
             baseResult.setCode(IReturnCode.ERROR_CODE);

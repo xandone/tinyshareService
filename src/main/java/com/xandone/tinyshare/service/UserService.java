@@ -5,6 +5,9 @@ import com.xandone.tinyshare.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.Map;
+
 /**
  * @author ：xandone
  * created on  ：2022/10/21 16:16
@@ -23,6 +26,15 @@ public class UserService {
         userMapper.updateUser(userBean);
     }
 
+    public UserBean addUser(String account,String psw,int visiteCode) throws Exception {
+        UserBean userBean=new UserBean();
+        userBean.setAccount(account);
+        userBean.setPassword(psw);
+        userBean.setRegistTime(new Date());
+        userBean.setLastLoginTime(new Date());
+        userMapper.addUser(userBean);
+        return userBean;
+    }
 
 
 }

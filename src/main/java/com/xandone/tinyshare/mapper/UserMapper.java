@@ -11,4 +11,6 @@ public interface UserMapper {
     UserBean getUserByAccount(String account);
 
     void updateUser(UserBean userBean);
+
+    void addUser(UserBean userBean);
 }

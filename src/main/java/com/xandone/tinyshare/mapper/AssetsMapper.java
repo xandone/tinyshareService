@@ -25,4 +25,8 @@ public interface AssetsMapper {
 
     AssetsBean getAssetById(String artId);
 
+    List<AssetsBean> searchAssets(AssetsBean assetsBean);
+
+    List<AssetsBean> searchAssetsbyType(AssetsBean assetsBean);
+
 }

@@ -72,4 +72,27 @@
         where asset_id = #{assetId}
     </select>
 
+    <select id="searchAssets" parameterType="com.xandone.tinyshare.bean.AssetsBean" resultMap="assetsBean">
+        select * from t_assets
+        <where>
+            <if test="title!=null">
+                title like concat('%',#{title},'%')
+            </if>
+        </where>
+        order by asset_id desc
+    </select>
+
+    <select id="searchAssetsbyType" parameterType="com.xandone.tinyshare.bean.AssetsBean" resultMap="assetsBean">
+        select * from t_assets
+        <where>
+            <if test="title!=null">
+                title like concat('%',#{title},'%')
+            </if>
+            <if test="type!=null and type!=0">
+                and type=#{type}
+            </if>
+        </where>
+        order by asset_id desc
+    </select>
+
 </mapper>

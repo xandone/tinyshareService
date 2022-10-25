@@ -27,7 +27,39 @@ public class UserController {
     @Autowired
     UserService userService;
 
-
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResult login(@RequestParam(value = "account") String account,
+                            @RequestParam(value = "psw") String psw,
+                            @RequestParam(value = "visiteCode") int visiteCode) {
+        BaseResult baseResult = new BaseResult();
+        List<UserBean> list = new ArrayList<>();
+        UserBean adminBean;
+        try {
+            if (visiteCode!=9527){
+                baseResult.setMsg("邀请码错误,注册失败");
+                baseResult.setCode(IReturnCode.ERROR_CODE);
+                return baseResult;
+            }
+            adminBean = userService.addUser(account,psw,visiteCode);
+            if (adminBean == null) {
+                baseResult.setMsg("注册失败");
+                baseResult.setCode(IReturnCode.ERROR_CODE);
+                return baseResult;
+            }  else {
+                adminBean.setToken(TokenUtils.getToken(adminBean.getUserId()));
+                list.add(adminBean);
+                baseResult.setData(list);
+                baseResult.setCode(IReturnCode.SUCCESS);
+                baseResult.setMsg("注册成功");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            baseResult.setMsg(IReturnCode.MES_SERVER_ERROR);
+            baseResult.setCode(IReturnCode.ERROR_CODE);
+        }
+        return baseResult;
+    }
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public BaseResult login(@RequestParam(value = "account") String account,

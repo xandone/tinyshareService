@@ -48,7 +48,7 @@ public class AssetService {
     }
 
 
-    public BaseListResult getAllList(Integer page, Integer row, Integer type){
+    public BaseListResult getAllList(Integer page, Integer row, Integer type) {
         BaseListResult base = new BaseListResult();
         PageHelper.startPage(page, row);
         List<AssetsBean> list;
@@ -67,6 +67,23 @@ public class AssetService {
     public AssetsBean getAssetById(String artId) throws Exception {
         AssetsBean assetsBean = assetsMapper.getAssetById(artId);
         return assetsBean;
+    }
+
+    public BaseListResult searchAssets(Integer page, Integer row, AssetsBean assetsBean) {
+        BaseListResult base = new BaseListResult();
+        PageHelper.startPage(page, row);
+        List<AssetsBean> list;
+        int type = assetsBean.getType();
+        if (type == 0) {
+            list = assetsMapper.searchAssets(assetsBean);
+        } else {
+            list = assetsMapper.searchAssetsbyType(assetsBean);
+        }
+        int total = (int) new PageInfo<>(list).getTotal();
+
+        base.setData(list);
+        base.setTotal(total);
+        return base;
     }
 
 }
